@@ -41,6 +41,52 @@
     </javac>
   </target>
 
+
+  <!--
+      BEGIN SEMI-COMPILE
+      The following compile commands allow partial compilation of the tree to provide the ability to incrementally test during development.
+  -->
+  
+  <target name="compile-hand" depends="init" >
+    <javac srcdir="${src}"
+	   includes="api/*,impl/BlackJackHand.java,test/unit/HandTest.java"
+	   includeantruntime="false"
+           classpathref="default_classpath"
+           debug="true"
+           debuglevel="lines,vars,source"
+           destdir="${build}">
+      <compilerarg value="-Xlint:unchecked"/>
+    </javac>
+  </target>
+
+  <target name="compile-dealer" depends="init" >
+    <javac srcdir="${src}"
+	   includes="api/*,impl/BlackJackDealer.java,impl/BlackJackPlayer.java,BlackJackHand.java,test/unit/DealerTest.java"
+	   includeantruntime="false"
+           classpathref="default_classpath"
+           debug="true"
+           debuglevel="lines,vars,source"
+           destdir="${build}">
+      <compilerarg value="-Xlint:unchecked"/>
+    </javac>
+  </target>
+
+  <target name="compile-player" depends="init" >
+    <javac srcdir="${src}"
+	   includes="api/*,impl/AnotherBlackJackDealer.java,impl/BlackJackPlayer.java,BlackJackHand.java,test/unit/PlayerInitializationTest.java, test/unit/PlayerInteractionTest.java"
+	   includeantruntime="false"
+           classpathref="default_classpath"
+           debug="true"
+           debuglevel="lines,vars,source"
+           destdir="${build}">
+      <compilerarg value="-Xlint:unchecked"/>
+    </javac>
+  </target>
+
+  <!--
+      END SEMI-COMPILE
+  -->
+  
   <target name="clean" description="clean up" >
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
@@ -80,4 +126,72 @@
       </batchtest>
     </junit>
   </target>
+
+  <!--
+      BEGIN UNIT TESTS
+      The below commands allow you to Unit Test specific functionality of your code without running or compiling the entire test sweet.
+  -->
+  
+  <target name="unit-test-hand" depends="compile-hand" >
+    <junit showoutput="true"
+           printsummary="yes"
+           fork="yes"
+           haltonfailure="no">
+      <formatter type="plain"/>
+      <classpath refid="default_classpath"/>
+      <batchtest todir="${log}">
+        <fileset dir="${src}">
+          <include name="**/test/unit/HandTest.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="unit-test-dealer" depends="compile-dealer" >
+    <junit showoutput="true"
+           printsummary="yes"
+           fork="yes"
+           haltonfailure="no">
+      <formatter type="plain"/>
+      <classpath refid="default_classpath"/>
+      <batchtest todir="${log}">
+        <fileset dir="${src}">
+          <include name="**/test/unit/DealerTest.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>  
+
+  <target name="unit-test-player-init" depends="compile-player" >
+    <junit showoutput="true"
+           printsummary="yes"
+           fork="yes"
+           haltonfailure="no">
+      <formatter type="plain"/>
+      <classpath refid="default_classpath"/>
+      <batchtest todir="${log}">
+        <fileset dir="${src}">
+          <include name="**/test/unit/PlayerInitializationTest.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="unit-test-player-interact" depends="compile-player" >
+    <junit showoutput="true"
+           printsummary="yes"
+           fork="yes"
+           haltonfailure="no">
+      <formatter type="plain"/>
+      <classpath refid="default_classpath"/>
+      <batchtest todir="${log}">
+        <fileset dir="${src}">
+          <include name="**/test/unit/PlayerInteractionTest.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+  <!--
+      END UNIT TESTS
+  -->
 </project>

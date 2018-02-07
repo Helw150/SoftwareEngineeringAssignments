@@ -1,6 +1,6 @@
 package test.unit;
 
-import java.util.Set;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -23,7 +23,7 @@ public class HandTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testCardsReadOnly() {
-        Set<Card> cards = hand.getCards();
+        List<Card> cards = hand.getCards();
         cards.add(new Card(Card.Value.ACE, Card.Suit.CLUB));
     }
 
@@ -67,4 +67,14 @@ public class HandTest {
 
         assertEquals(hand.valueOf(), 20);
     }
+
+    // This is my @wbh230's own custom test to confirm Aces handled
+    @Test
+    public void testAcesAreHandled() {
+        hand.addCard(new Card(Card.Value.ACE, Card.Suit.CLUB));
+        hand.addCard(new Card(Card.Value.ACE, Card.Suit.HEART));
+
+        assertEquals(hand.valueOf(), 12);
+    }
+
 }
