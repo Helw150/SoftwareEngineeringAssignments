@@ -31,4 +31,6 @@ public interface Hand extends Comparable<Hand> {
      * based on the "value" of the cards in this hand.
      */
     public int valueOf();
+
+    public int countCards();
 }

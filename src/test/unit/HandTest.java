@@ -68,13 +68,21 @@ public class HandTest {
         assertEquals(hand.valueOf(), 20);
     }
 
-    // This is my @wbh230's own custom test to confirm Aces handled
+    // This is @wbh230's own custom test to confirm Aces handled
     @Test
     public void testAcesAreHandled() {
         hand.addCard(new Card(Card.Value.ACE, Card.Suit.CLUB));
         hand.addCard(new Card(Card.Value.ACE, Card.Suit.HEART));
 
         assertEquals(hand.valueOf(), 12);
+    }
+
+    @Test
+    public void testCountCards() {
+        hand.addCard(new Card(Card.Value.KING, Card.Suit.CLUB));
+        hand.addCard(new Card(Card.Value.KING, Card.Suit.HEART));
+	
+        assertEquals(hand.countCards(), 2);
     }
 
 }

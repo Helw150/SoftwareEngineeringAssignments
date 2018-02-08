@@ -10,15 +10,22 @@ import api.Hand;
 
 public class BlackJackHand implements Hand {
     private List<Card> cards_in_hand;
+    private int num_cards;
     
     public BlackJackHand() {
-	cards_in_hand = new ArrayList<Card>();
+	this.cards_in_hand = new ArrayList<Card>();
+	this.num_cards = 0;
     }
     
     public void addCard(Card card) {
 	this.cards_in_hand.add(card);
+	this.num_cards += 1;
     }
 
+    public int countCards() {
+	return this.num_cards;
+    }
+    
     public List<Card> getCards() {
 	return Collections.unmodifiableList(this.cards_in_hand);
     }

@@ -147,7 +147,7 @@ one. Thus, the project expects command line arguments (see
 you; in order to run the game, type
 
 ```bash
-$> ant test
+$> ant system-test
 ```
 
 and a game with five players and a single deck is run. If you would
