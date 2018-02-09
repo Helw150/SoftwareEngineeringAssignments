@@ -19,7 +19,7 @@ public class BlackJackDealer extends GenericBlackJackPlayer implements Dealer {
     }
 
     public BlackJackDealer(int num_decks){
-	super();
+	super("Dealer");
 	this.deck = new ArrayList<Card>();
 	for (int i=0; i< num_decks; i++){
 	    for (Card.Value value : Card.Value.values()){
@@ -28,6 +28,7 @@ public class BlackJackDealer extends GenericBlackJackPlayer implements Dealer {
 		}
 	    }
 	}
+	this.shuffle();
     }
     
     public int placeWager(){
@@ -35,7 +36,7 @@ public class BlackJackDealer extends GenericBlackJackPlayer implements Dealer {
     }
     
     public boolean requestCard(){
-	return false;
+	return(this.player_hand.valueOf() < 17);
     }
 
     public void dealCard(Player player){

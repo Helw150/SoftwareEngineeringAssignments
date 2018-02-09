@@ -60,7 +60,7 @@ public abstract class Table {
 
     /*
      * Give each player a turn. Note that in Black Jack, the dealer
-     * should havea turn as well!
+     * should have a turn as well!
      */
     protected abstract void playerTurns();
 

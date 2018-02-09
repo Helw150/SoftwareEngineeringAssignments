@@ -5,7 +5,7 @@ import api.Player;
 
 import impl.GenericBlackJackPlayer;
 
-// Safe gambler - This player avoids busting and conserves money
+// Dumb&Timid - Bets with an individually stupid strategy and is timid on the whole
 public class BlackJackPlayer extends GenericBlackJackPlayer {
 
     public BlackJackPlayer(){
@@ -21,11 +21,11 @@ public class BlackJackPlayer extends GenericBlackJackPlayer {
     }
     
     public int placeWager(){
-	int wager = this.balance;
+	int wager = this.balance/10;
 	return super.placeWager(wager);
     }
     
     public boolean requestCard(){
-	return true;
+	return (!this.player_hand.isWinner() && this.player_hand.isValid());
     }
 } 

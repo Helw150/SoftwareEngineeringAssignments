@@ -8,7 +8,8 @@ public abstract class GenericBlackJackPlayer implements Player {
     protected Hand player_hand;
     private String name;
     protected int balance;
-
+    private int wins;
+    
     public GenericBlackJackPlayer(){
 	this("No Name", 0);
     }
@@ -23,10 +24,16 @@ public abstract class GenericBlackJackPlayer implements Player {
     }
 
     protected int placeWager(int wager){
+	if(wager < 1 && this.balance != 0){
+	    wager = 1;
+	} 
 	this.balance -= wager;
 	return wager;
     }
 
+    public String toString(){
+	return this.name + " - Balance: " + this.balance + " - Wins: "+ this.wins + "\n";
+    }
     
     public void receive(Card card){
 	this.player_hand.addCard(card);
@@ -44,6 +51,7 @@ public abstract class GenericBlackJackPlayer implements Player {
 
     public void payOut(int money){
 	this.balance += money;
+	this.wins++;
     }
 
     public int getMoney(){

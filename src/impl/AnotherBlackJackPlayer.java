@@ -5,7 +5,7 @@ import api.Player;
 
 import impl.GenericBlackJackPlayer;
 
-// Safe gambler - This player avoids busting and conserves money
+// Smart&Bold - This gambler bets alot, but follows a best practice strategy.
 public class AnotherBlackJackPlayer extends GenericBlackJackPlayer {
 
     public AnotherBlackJackPlayer(){
@@ -21,11 +21,11 @@ public class AnotherBlackJackPlayer extends GenericBlackJackPlayer {
     }
     
     public int placeWager(){
-	int wager = this.balance;
+	int wager = (3*this.balance)/4;
 	return super.placeWager(wager);
     }
     
     public boolean requestCard(){
-	return true;
+	return (this.player_hand.valueOf() <= 16);
     }
 } 
