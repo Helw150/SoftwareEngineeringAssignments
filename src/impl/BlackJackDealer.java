@@ -21,6 +21,7 @@ public class BlackJackDealer extends GenericBlackJackPlayer implements Dealer {
     public BlackJackDealer(int num_decks){
 	super("Dealer");
 	this.deck = new ArrayList<Card>();
+	// Generate a deck with every possible card and do so for the number of decks
 	for (int i=0; i< num_decks; i++){
 	    for (Card.Value value : Card.Value.values()){
 		for (Card.Suit suit : Card.Suit.values()){		
@@ -28,6 +29,7 @@ public class BlackJackDealer extends GenericBlackJackPlayer implements Dealer {
 		}
 	    }
 	}
+	// Shuffle the deck before playing
 	this.shuffle();
     }
     
@@ -39,17 +41,20 @@ public class BlackJackDealer extends GenericBlackJackPlayer implements Dealer {
 	return(this.player_hand.valueOf() < 17);
     }
 
+    // Move cards from deck to player
     public void dealCard(Player player){
 	Card card = this.deck.remove(0);
 	player.receive(card);
     }
 
+    // Move cards from player to deck
     public void collectCards(Player player){
 	Hand relinquished_hand = player.relinquishCards();
 	this.deck.addAll(relinquished_hand.getCards());
 	this.shuffle();
     }
 
+    // Use built in shuffle function
     public void shuffle(){
 	Collections.shuffle(this.deck);
     }

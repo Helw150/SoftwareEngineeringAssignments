@@ -20,6 +20,8 @@ public class BlackJackTable extends Table {
     public BlackJackTable(){
 	this(2,1);
     }
+    
+    // Initialize all variables and make every other player a different strategy
     public BlackJackTable (int num_players, int num_decks) {
 	this.dealer = new BlackJackDealer(num_decks);
 	this.wagers = new HashMap<Player, Integer>();
@@ -41,10 +43,12 @@ public class BlackJackTable extends Table {
 	}
     }
 
+    // Return read only players list
     public Collection<Player> getPlayers(){
 	return Collections.unmodifiableList(this.players);
     }
-    
+
+    // Check if the amount of money the players have is non-zero
     public boolean isGameOver(){
 	int total_money_left = 0;
 	for (Player player : this.players){
@@ -53,6 +57,7 @@ public class BlackJackTable extends Table {
         return (total_money_left == 0);
     }
 
+    // Use the string helper to construct a complete string
     public String toString(){
 	StringBuffer representation = new StringBuffer("");
 	representation.append(this.dealer.toString());
@@ -62,6 +67,7 @@ public class BlackJackTable extends Table {
 	return representation.toString();
     }
 
+    /* BEGIN SECTION OF DEALER THEN ALL PLAYERS HIGHER ORDER FUNCTION */
     public void collectCards(){
 	this.dealer.collectCards(this.dealer);
 	for (Player player : this.players){
@@ -77,13 +83,14 @@ public class BlackJackTable extends Table {
 	    }
 	}
     }
-
+    /* END HIGHER ORDER SECTION*/
     public void collectBets(){
 	for (Player player : this.players){
 	    this.wagers.put(player, player.placeWager());
 	}
     }
 
+    // Keep dealing as long as player says hit me
     public void playerTurns(){
 	while(this.dealer.requestCard()){
 	    this.dealer.dealCard(this.dealer);
@@ -100,6 +107,7 @@ public class BlackJackTable extends Table {
 	int best_value = this.dealer.getHand().valueOf();
 	for (Player player : this.players){
 	    int player_value = player.getHand().valueOf();
+	    // Nasty check to assure that the best hand isnt busted, is higher value, or uses less cards to win
 	    if(!(best_player.getHand().isValid()) || (player.getHand().isValid() && player_value >= best_value && player.numberOfCards() < best_player.numberOfCards())){
 		best_value = player_value;
 		best_player = player;

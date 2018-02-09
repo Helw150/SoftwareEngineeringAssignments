@@ -30,6 +30,8 @@ public class BlackJackHand implements Hand {
 	return Collections.unmodifiableList(this.cards_in_hand);
     }
 
+    // Helper function which handles the case of aces being 1 or 11
+    // Assumes player wants the highest value that isn't busted
     private int handleAces(int current_val, int num_aces_in_hand){
 	if(current_val >= 21) {
 	    // Iterates until either: You didn't bust or You have no more aces that are counted as 11
@@ -40,7 +42,8 @@ public class BlackJackHand implements Hand {
 	}
 	return current_val;
     } 
-    
+
+    // Uses adds all enum values and then handles the aces to avoid bust
     public int valueOf() {
 	int value = 0;
 	int num_aces = 0;
@@ -56,6 +59,7 @@ public class BlackJackHand implements Hand {
 	return this.handleAces(value, num_aces);
     }
 
+    // Compare by blackjack hand value
     public int compareTo(Hand other_hand) {
 	if(this.valueOf() > other_hand.valueOf()){
 	    return 1;

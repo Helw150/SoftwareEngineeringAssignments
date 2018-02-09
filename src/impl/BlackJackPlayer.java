@@ -19,12 +19,12 @@ public class BlackJackPlayer extends GenericBlackJackPlayer {
     public BlackJackPlayer(String name, int initial_balance){
 	super(name, initial_balance);
     }
-    
+    // Timid
     public int placeWager(){
 	int wager = this.balance/10;
 	return super.placeWager(wager);
     }
-    
+    // Dumb
     public boolean requestCard(){
 	return (!this.player_hand.isWinner() && this.player_hand.isValid());
     }
