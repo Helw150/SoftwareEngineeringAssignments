@@ -66,7 +66,7 @@ public class ConnectFour extends Game {
 
     // Check if the indices are valid and then call my internal place function that deals with just column
     public void placeChip(int row, int col) throws GameStateException {
-	if(row != 0 || this.numCols <= col || col < 0 || this.board[0][col] != Chip.EMPTY){
+	if(row != 0 || this.numCols <= col || col < 0 || (this.board[0][col] != Chip.EMPTY && !this.isGameOver())){
 	    throw new GameIndexOutOfBoundsException(0, col);
 	} else {
 	    placeChip(col);
@@ -102,7 +102,7 @@ public class ConnectFour extends Game {
 
     // A getter that simply confirms the game is over first and excepts if it isnt over
     public Chip getWinningPlayer() throws GameStateException{
-	if (this.isGameOver()){
+	if (this.isGameOver() && this.winningPlayer != Chip.EMPTY){
 	    return this.winningPlayer;
 	} else {
 	    throw new GameStateException();
