@@ -25,7 +25,7 @@ public class ConnectFour extends Game {
     public ConnectFour(int numRows, int numCols){
 	this.numRows = numRows;
 	this.numCols = numCols;
-	this.connectToWin = connectToWin;
+	this.connectToWin = 4;
 	this.numPlayers = 2;
 	this.currentPlayer = 0;
 	this.winningPlayer = Chip.EMPTY;
@@ -34,7 +34,9 @@ public class ConnectFour extends Game {
 	this.players[0] = Chip.RED;
 	this.players[1] = Chip.BLUE;
 	for(int i = 0; i < numRows; i++){
-	    Arrays.fill(board[i], Chip.EMPTY);
+	    for(int j = 0; j < numCols; j++){
+		board[i][j] = Chip.EMPTY;
+	    }
 	}
     }
 
@@ -47,38 +49,42 @@ public class ConnectFour extends Game {
     }
 
     public Chip getChip(int row, int col){
-	if (this.numRows <= row || this.numCols <= col){
+	if (row < 0 || col < 0 || this.numRows <= row || this.numCols <= col){
 	    throw new GameIndexOutOfBoundsException(row, col);
 	} else {
 	    return this.board[row][col];
 	}
     }
 
-    public void placeChip(int col) throws GameStateException {
-	if(board[0][col] != Chip.EMPTY){
+    public void placeChip(int row, int col) throws GameStateException {
+	if(row != 0 || this.numCols <= col || col < 0 || this.board[0][col] != Chip.EMPTY){
 	    throw new GameIndexOutOfBoundsException(0, col);
-	}
-	for(int i = 0; i < numRows; i++){
-	    if(board[i][col] == Chip.EMPTY){
-		placeChip(i, col);
-	    }
+	} else {
+	    placeChip(col);
 	}
     }
-    
-    public void placeChip(int row, int col) throws GameStateException {
-	if (this.numRows <= row || this.numCols <= col){
-	    throw new GameIndexOutOfBoundsException(row, col);
-	} else if(this.isGameOver()) {
+
+
+    public void placeChip(int col) throws GameStateException {
+	int row = 0;
+	for(int i = 0; i < numRows; i++){
+	    if(board[i][col] == Chip.EMPTY){
+		row = i;
+	    }
+	}
+
+	if(this.isGameOver()) {
 	    throw new GameStateException();
 	} else {
 	    this.board[row][col] = this.players[this.currentPlayer];
-	    if(this.isGameOver()){
-		this.winningPlayer = this.players[this.currentPlayer];
-	    } else {
+	    if(!this.isGameOver()){
 		this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
 	    }
+	    setChanged();
 	}
+	notifyObservers();
     }
+
 
     public Chip getWinningPlayer() throws GameStateException{
 	if (this.isGameOver()){
@@ -106,14 +112,14 @@ public class ConnectFour extends Game {
 
     public boolean verticalWin(int i, int j, Chip player){
 	if(i < numRows-(connectToWin-1)){
-	    return (this.board[i][j] == player && this.board[i+1][j] == player && this.board[i+2][j] == player && this.board[i+3][j] == player);
+	    return(this.board[i][j] == player && this.board[i+1][j] == player && this.board[i+2][j] == player && this.board[i+3][j] == player);
 	} else {
 	    return false;
 	}
     }
 
     public boolean top2bottomDiagonalWin(int i, int j, Chip player){
-	if(3 < i && 3 < j){
+	if(3 <= i && 3 <= j){
 	    return (this.board[i][j] == player && this.board[i-1][j-1] == player && this.board[i-2][j-2] == player && this.board[i-3][j-3] == player);
 	} else {
 	    return false;
@@ -121,8 +127,8 @@ public class ConnectFour extends Game {
     }
 
     public boolean bottom2topDiagonalWin(int i, int j, Chip player){
-	if(3 < i && j < numCols-(connectToWin-1)){
-	    return (this.board[i][j] == player && this.board[i-1][j-1] == player && this.board[i-2][j-2] == player && this.board[i-3][j-3] == player);
+	if(3 <= i && j < numCols-(connectToWin-1)){
+	    return (this.board[i][j] == player && this.board[i-1][j+1] == player && this.board[i-2][j+2] == player && this.board[i-3][j+3] == player);
 	} else {
 	    return false;
 	}
@@ -133,16 +139,18 @@ public class ConnectFour extends Game {
 	    for(int j = 0; j < this.numCols; j++){
 		for(Chip player : this.players){
 		    if(horizontalWin(i,j,player) || verticalWin(i,j,player) || top2bottomDiagonalWin(i,j,player) || bottom2topDiagonalWin(i,j,player)){
+			this.winningPlayer = player;
 			return true;
 		    }
 		}
 	    }
 	}
-	for (int i = 0; i < this.numRows; i++){
+	for (int i = 0; i < this.numCols; i++){
 	    if(board[0][i] == Chip.EMPTY){
 		return false;
 	    }
 	}
+	this.winningPlayer = Chip.EMPTY;
 	return true;
     }
 }
