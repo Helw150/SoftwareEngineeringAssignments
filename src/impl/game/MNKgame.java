@@ -168,7 +168,7 @@ public abstract class MNKgame extends Game {
 	for (int i = 0; i < this.numRows; i++){
 	    for(int j = 0; j < this.numCols; j++){
 		// Check for wins on each player
-		for(int player = 0; i < 2; i++){
+		for(int player = 0; player < 2; player++){
 		    // Check all booleans - the validity of the space as a check spot is contained internally
 		    if(horizontalWin(i,j,this.players[player]) || verticalWin(i,j,this.players[player]) || top2bottomDiagonalWin(i,j,this.players[player]) || bottom2topDiagonalWin(i,j,this.players[player])){
 			
