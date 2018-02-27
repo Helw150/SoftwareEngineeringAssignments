@@ -26,7 +26,7 @@ public class Complica extends MNKgame {
     }
 
     private void dropPiece(int col){
-	for(int i = numRows; i > 0; --i){
+	for(int i = numRows-1; i > 0; --i){
 	    this.board[i][col] = this.board[i-1][col];
 	}
 	this.board[0][col] = Chip.EMPTY;
