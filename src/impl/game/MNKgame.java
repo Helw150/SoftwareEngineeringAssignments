@@ -8,11 +8,11 @@ import api.Game;
 import exc.GameIndexOutOfBoundsException;
 import exc.GameStateException;
 
-public class MNKgame extends Game {
-    private Chip[][] board;
-    private Chip[] players;
+public abstract class MNKgame extends Game {
     private Chip winningPlayer;
-    private int numRows, numCols, numPlayers, currentPlayer, connectToWin;
+    protected Chip[][] board;
+    protected Chip[] players;
+    protected int numRows, numCols, numPlayers, currentPlayer, connectToWin;
 
     /* 
        ANT Build file calls it M,N,K Game so build functionality that allows for variable M,N in despite specifications of the lab.
@@ -43,6 +43,19 @@ public class MNKgame extends Game {
 	}
     }
 
+    // The function which has to be changed for all MNK games
+    public abstract void place(int row, int col) throws GameStateException;
+    
+    // The Template for which all other MNKgames must follow
+    public void placeChip(int row, int col) throws GameStateException {
+	if(this.numCols <= col || this.numRows <= row || row < 0 || col < 0){
+	    throw new GameIndexOutOfBoundsException(row, col);
+	} else {
+	    this.place(row, col);
+	}
+	notifyObservers();
+    }
+    
     // Simple getter for rows
     public int getRows(){
 	return this.numRows;
@@ -66,42 +79,6 @@ public class MNKgame extends Game {
 	    return this.board[row][col];
 	}
     }
-
-    // Check if the indices are valid and then call my internal place function that deals with just column
-    public void placeChip(int row, int col) throws GameStateException {
-	if(row != 0 || this.numCols <= col || col < 0 || (this.board[0][col] != Chip.EMPTY && !this.isGameOver())){
-	    throw new GameIndexOutOfBoundsException(0, col);
-	} else {
-	    placeChip(col);
-	}
-	// Let observers know that everything has changed
-	notifyObservers();
-    }
-
-
-    // Check if the game is over, otherwise simulate placed piece
-    public void placeChip(int col) throws GameStateException {
-	if(this.isGameOver()) {
-	    throw new GameStateException();
-	} else {
-	    // Simulates the "falling" of the piece
-	    int row = 0;
-	    for(int i = 0; i < numRows; i++){
-		if(board[i][col] == Chip.EMPTY){
-		    row = i;
-		}
-	    }
-	    // Set the requested piece to the current players color
-	    this.board[row][col] = this.players[this.currentPlayer];
-	    // If the game isn't over iterate to the next player
-	    if(!this.isGameOver()){
-		this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
-	    }
-	    // Inform the observable that it has changed
-	    setChanged();
-	}
-    }
-
 
     // A getter that simply confirms the game is over first and excepts if it isnt over
     public Chip getWinningPlayer() throws GameStateException{
