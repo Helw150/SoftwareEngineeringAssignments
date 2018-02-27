@@ -18,9 +18,8 @@ public abstract class MNKgame extends Game {
        ANT Build file calls it M,N,K Game so build functionality that allows for variable M,N in despite specifications of the lab.
        K is left out because it requires the use of counters which is destroys the beauty of my Boolean checks.
     */
-    private MNKgame(){
-    }
-
+    private MNKgame(){}
+    
     // Take numRows and numColumns
     public MNKgame(int numRows, int numCols, int connectToWin){
 	this.numRows = numRows;
@@ -45,13 +44,25 @@ public abstract class MNKgame extends Game {
 
     // The function which has to be changed for all MNK games
     public abstract void place(int row, int col) throws GameStateException;
+
+    // Function to handle checking for a and handling a full board;
+    public abstract boolean nonWinEnd();
+    
     
     // The Template for which all other MNKgames must follow
     public void placeChip(int row, int col) throws GameStateException {
-	if(this.numCols <= col || this.numRows <= row || row < 0 || col < 0){
+	if(this.isGameOver()){
+	    throw new GameStateException();
+	} else if(this.numCols <= col || this.numRows <= row || row < 0 || col < 0){
 	    throw new GameIndexOutOfBoundsException(row, col);
 	} else {
 	    this.place(row, col);
+	    // If the game isn't over iterate to the next player
+	    if(!this.isGameOver()){
+		this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
+	    }
+	    // Inform the observable that it has changed
+	    setChanged();
 	}
 	notifyObservers();
     }
@@ -152,29 +163,28 @@ public abstract class MNKgame extends Game {
 
     // Check all my win conditions
     public boolean isGameOver(){
+	int[] wins = new int[this.numPlayers];
 	// Check every win condition in a single loop
 	for (int i = 0; i < this.numRows; i++){
 	    for(int j = 0; j < this.numCols; j++){
 		// Check for wins on each player
-		for(Chip player : this.players){
+		for(int player = 0; i < 2; i++){
 		    // Check all booleans - the validity of the space as a check spot is contained internally
-		    if(horizontalWin(i,j,player) || verticalWin(i,j,player) || top2bottomDiagonalWin(i,j,player) || bottom2topDiagonalWin(i,j,player)){
+		    if(horizontalWin(i,j,this.players[player]) || verticalWin(i,j,this.players[player]) || top2bottomDiagonalWin(i,j,this.players[player]) || bottom2topDiagonalWin(i,j,this.players[player])){
+			
 			// if there is a win set my winning player to which of the two was found
-			this.winningPlayer = player;
-			return true;
+			wins[player]++;
 		    }
 		}
 	    }
 	}
-	// Check that there are empty spaces in the board
-	for (int i = 0; i < this.numCols; i++){
-	    // We only need to check the top row due to falling
-	    if(board[0][i] == Chip.EMPTY){
-		return false;
-	    }
+	// If the wins aren't equal there is a winner
+	if(wins[0] != wins[1]){
+	    // If 0 has more wins than 1 they are the winner else 1 is the winner since we know they are not equal
+	    this.winningPlayer = (wins[0] > wins[1]) ? this.players[0] : this.players[1];
+	    return true;
+	} else {
+	    return nonWinEnd();
 	}
-	// If the board was full and reached this point, the game is a tie.
-	this.winningPlayer = Chip.EMPTY;
-	return true;
     }
 }

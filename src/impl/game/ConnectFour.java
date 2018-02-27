@@ -23,8 +23,6 @@ public class ConnectFour extends MNKgame {
 	} else {
 	    place(col);
 	}
-	// Let observers know that everything has changed
-	notifyObservers();
     }
 
 
@@ -42,13 +40,17 @@ public class ConnectFour extends MNKgame {
 	    }
 	    // Set the requested piece to the current players color
 	    this.board[row][col] = this.players[this.currentPlayer];
-	    // If the game isn't over iterate to the next player
-	    if(!this.isGameOver()){
-		this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
-	    }
-	    // Inform the observable that it has changed
-	    setChanged();
 	}
     }
 
+    public boolean nonWinEnd(){
+	// Check that there are empty spaces in the board
+	for (int i = 0; i < this.numCols; i++){
+	    // We only need to check the top row due to falling
+	    if(board[0][i] == Chip.EMPTY){
+		return false;
+	    }
+	}
+	return true;
+    }
 }
