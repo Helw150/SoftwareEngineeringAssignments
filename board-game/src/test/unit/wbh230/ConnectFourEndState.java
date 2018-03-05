@@ -31,6 +31,13 @@ public class ConnectFourEndState {
 	}
     }
 
+        @Test(expected = GameStateException.class)
+    public void placeAfterWin() throws Exception {
+        for(int i = 0; i < game.getRows()+1; i++){
+	    game.placeChip(0, 0);
+	}
+    }
+    
     @Test
     public void getGameIsOver() throws Exception {
 	assertTrue(game.isGameOver());

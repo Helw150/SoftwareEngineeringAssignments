@@ -86,7 +86,7 @@ public class ConnectFourPlayState {
     	assertTrue("Game Finished", game.isGameOver());
     }
 
-    @Test
+    @Test(expected = GameStateException.class)
     public void tieGameOver() throws Exception {
 	for(int i = 0; i < game.getRows(); i++){
 	    for(int j = 0; j < (game.getColumns())/2; j++){
@@ -103,6 +103,6 @@ public class ConnectFourPlayState {
 	for(int i = 0; i < game.getRows(); i++){
 	    game.placeChip(0,6);
 	}
-	assertTrue("Game Finished", game.isGameOver());
+	game.getWinningPlayer();
     }
 }

@@ -1,3 +1,4 @@
+# To Be Clear for Grading - HW2 is held on the HW2 Branch.
 # Homework 1: Connect Four
 
 The primary objective of this homework is to develop the game of
