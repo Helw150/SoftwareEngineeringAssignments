@@ -34,14 +34,15 @@ public class Console extends View {
     // Take User Input from the Game
     public void play(Game game){
 	try {
-	    if (game.getCurrentPlayer() != Chip.EMPTY) {
-	    System.out.println(game.getCurrentPlayer() +" player - select a Column to Play: ");
-	    } else {
-		System.out.println("Game Over - Enter a number(0-6) and hit enter to announce the winner.");
-	    }
 	    Scanner stdin = new Scanner(System.in);
-	    int col = Integer.parseInt(stdin.next());
-	    game.placeChip(0, col);
+	    if (game.getCurrentPlayer() != Chip.EMPTY) {
+		System.out.println(game.getCurrentPlayer() +" player - select a Row and a Column to Play: ");
+		int row = Integer.parseInt(stdin.next());
+		int col = Integer.parseInt(stdin.next());
+		game.placeChip(row, col);
+	    } else {
+		game.placeChip(0, 0);
+	    }
 	}
 	// This should only occur if the game is appropriately over, so break and move to the higher level announcement
 	catch (GameStateException e) {
