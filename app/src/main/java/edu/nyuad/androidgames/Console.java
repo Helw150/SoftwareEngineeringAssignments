@@ -1,6 +1,7 @@
 package edu.nyuad.androidgames;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -37,11 +38,22 @@ public class Console extends AppCompatActivity implements Observer{
         grid = (GridLayout) findViewById(R.id.grid);
         grid.setColumnCount(cols);
         grid.setRowCount(rows);
+        // Get some screen dimension info to size my buttons
+        Point size = new Point();
+        getWindowManager().getDefaultDisplay().getSize(size);
+        int screenWidth = size.x;
+        int screenHeight = size.y;
+        int width = ((screenWidth)/cols);
+        int height = ((screenHeight-400)/rows);
         buttons = new Button[rows][cols];
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
                 buttons[i][j] = new Button(this);
                 placeOnClick(buttons[i][j], i, j);
+                GridLayout.LayoutParams btn = new GridLayout.LayoutParams();
+                btn.width = width;
+                btn.height = height;
+                buttons[i][j].setLayoutParams(btn);
                 grid.addView(buttons[i][j]);
             }
         }
