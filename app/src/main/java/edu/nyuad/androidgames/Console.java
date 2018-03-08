@@ -1,18 +1,23 @@
 package edu.nyuad.androidgames;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.Toast;
 
 import java.util.Observer;
 import java.util.Observable;
 
+import edu.nyuad.boardgames.Chip;
 import edu.nyuad.boardgames.Complica;
 import edu.nyuad.boardgames.ConnectFour;
 import edu.nyuad.boardgames.Game;
+import edu.nyuad.boardgames.GameStateException;
+import edu.nyuad.boardgames.GameIndexOutOfBoundsException;
 import edu.nyuad.boardgames.TicTacToe;
 
 public class Console extends AppCompatActivity implements Observer{
@@ -36,6 +41,7 @@ public class Console extends AppCompatActivity implements Observer{
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
                 buttons[i][j] = new Button(this);
+                placeOnClick(buttons[i][j], i, j);
                 grid.addView(buttons[i][j]);
             }
         }
@@ -61,15 +67,55 @@ public class Console extends AppCompatActivity implements Observer{
     }
 
     public void render(Game game){
-
+        for (int i = 0; i < rows; i++){
+            for (int j = 0; j < cols; j++){
+                Chip val = game.getChip(i,j);
+                if (val == Chip.BLUE){
+                    buttons[i][j].setBackgroundColor(Color.parseColor("#ff0000"));
+                } else if (val == Chip.RED){
+                    buttons[i][j].setBackgroundColor(Color.parseColor("#0000ff"));
+                }
+            }
+        }
     }
 
+    public void placeClick(int i, int j){
+        try {
+            this.game.placeChip(i,j);
+        }
+        // This should only occur if the game is appropriately over, so break and move to the higher level announcement
+        catch (GameStateException e) {
+            try {
+                Chip winner = this.game.getWinningPlayer();
+                Toast.makeText(this, winner + " wins!", Toast.LENGTH_LONG).show();
+            }
+            catch (GameStateException l) {
+                Toast.makeText(this, "It was a tie!", Toast.LENGTH_LONG).show();
+            }
+            Toast.makeText(this, "Invalid Range for Move", Toast.LENGTH_LONG).show();
+        } catch (GameIndexOutOfBoundsException e){
+            Toast.makeText(this, "Invalid Range for Move", Toast.LENGTH_LONG).show();
+        } catch (NumberFormatException e){
+            Toast.makeText(this, "Please input a number", Toast.LENGTH_LONG).show();
+        }
+    }
     public void update(Observable o, Object game) {
         render(this.game);
+        if(this.game.isGameOver()){
+            placeClick(0, 0);
+        }
     }
     public void goBack(View view){
         Intent i = new Intent(Console.this, MainActivity.class);
         Console.this.startActivity(i);
     }
 
+    private void placeOnClick(final Button btn, final int i, final int j) {
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                placeClick(i, j);
+            }
+        });
+    }
 }
