@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.nyuad.androidgames.ConnectFourConsole">
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,12 +17,11 @@
         />
 
     <Button
-        android:id="@+id/exit"
-        android:layout_width="106dp"
-        android:layout_height="71dp"
-        android:layout_weight="1"
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:onClick="goBack"
-        android:text="exit"
-        tools:layout_editor_absoluteX="275dp"
-        tools:layout_editor_absoluteY="424dp" />
+        android:text="Main Menu"
+        tools:layout_alignParentBottom="true" />
+   </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
