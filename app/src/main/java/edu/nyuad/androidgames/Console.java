@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.GridLayout;
 import android.widget.Button;
 import android.content.Intent;
@@ -27,6 +28,7 @@ public class Console extends AppCompatActivity implements Observer{
     private Game game;
     GridLayout grid;
     Button[][] buttons;
+    TextView player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class Console extends AppCompatActivity implements Observer{
         int screenWidth = size.x;
         int screenHeight = size.y;
         int width = ((screenWidth)/cols);
-        int height = ((screenHeight-400)/rows);
+        int height = ((screenHeight-420)/rows);
         buttons = new Button[rows][cols];
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
@@ -71,20 +73,22 @@ public class Console extends AppCompatActivity implements Observer{
             case "ticTacToe":
                 this.game = new TicTacToe();
                 break;
-            default:
+            default:;
                 this.game = new ConnectFour();
                 break;
         }
         this.game.addObserver(this);
+        player = (TextView) findViewById(R.id.player_info);
+        player.setText("Current Player: " + this.game.getCurrentPlayer());
     }
 
     public void render(Game game){
         for (int i = 0; i < rows; i++){
             for (int j = 0; j < cols; j++){
                 Chip val = game.getChip(i,j);
-                if (val == Chip.BLUE){
+                if (val == Chip.RED){
                     buttons[i][j].setBackgroundColor(Color.parseColor("#ff0000"));
-                } else if (val == Chip.RED){
+                } else if (val == Chip.BLUE){
                     buttons[i][j].setBackgroundColor(Color.parseColor("#0000ff"));
                 }
             }
@@ -94,17 +98,20 @@ public class Console extends AppCompatActivity implements Observer{
     public void placeClick(int i, int j){
         try {
             this.game.placeChip(i,j);
+            if(this.game.getCurrentPlayer() != Chip.EMPTY)
+                player.setText("Current Player: " + this.game.getCurrentPlayer());
         }
         // This should only occur if the game is appropriately over, so break and move to the higher level announcement
         catch (GameStateException e) {
             try {
                 Chip winner = this.game.getWinningPlayer();
                 Toast.makeText(this, winner + " wins!", Toast.LENGTH_LONG).show();
+                player.setText("Winning Player: " + winner);
             }
             catch (GameStateException l) {
                 Toast.makeText(this, "It was a tie!", Toast.LENGTH_LONG).show();
+                player.setText("The game was a draw");
             }
-            Toast.makeText(this, "Invalid Range for Move", Toast.LENGTH_LONG).show();
         } catch (GameIndexOutOfBoundsException e){
             Toast.makeText(this, "Invalid Range for Move", Toast.LENGTH_LONG).show();
         } catch (NumberFormatException e){
