@@ -105,11 +105,11 @@ public class Console extends AppCompatActivity implements Observer{
         catch (GameStateException e) {
             try {
                 Chip winner = this.game.getWinningPlayer();
-                Toast.makeText(this, winner + " wins!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, winner + " won!", Toast.LENGTH_SHORT).show();
                 player.setText("Winning Player: " + winner);
             }
             catch (GameStateException l) {
-                Toast.makeText(this, "It was a tie!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "It was a tie!", Toast.LENGTH_SHORT).show();
                 player.setText("The game was a draw");
             }
         } catch (GameIndexOutOfBoundsException e){
