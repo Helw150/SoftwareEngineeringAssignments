@@ -1,3 +1,5 @@
+#### Documentation is held within the `documentation` directory
+
 # Android
 
 The objective of this assignment is to port your existing board game
