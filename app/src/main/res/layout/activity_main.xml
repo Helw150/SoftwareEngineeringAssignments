@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.nyuad.androidgames.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="20dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <Button
+            android:id="@+id/connectFour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="connectFourConsole"
+            android:text="Connect Four" />
+
+        <Button
+            android:id="@+id/complica"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="complicaConsole"
+            android:text="Complica" />
+
+        <Button
+            android:id="@+id/ticTacToe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="ticTacToeConsole"
+            android:text="Tic Tac Toe" />
+    </LinearLayout>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
